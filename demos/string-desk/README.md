@@ -4,7 +4,9 @@ String Desk is a self-initiated localization-review prototype. It is a working a
 
 ## Open the project
 
-[Download the single-file HTML](https://raw.githubusercontent.com/xu997694199-arch/-/main/demos/string-desk/index.html), save it as `string-desk.html`, and open it in a desktop browser. GitHub may display the source first; use **Download raw file**. This link is a downloadable demo, not a hosted deployment. No installation, account, API key, or network connection is needed after downloading.
+[Open the interactive preview](https://xu997694199-arch.github.io/-/) in a desktop browser. No download is needed. The preview is for evaluation only; see the licensing section below.
+
+[Download the single-file HTML](https://raw.githubusercontent.com/xu997694199-arch/-/main/demos/string-desk/index.html), save it as `string-desk.html`, and open it in a desktop browser. GitHub may display the source first; use **Download raw file**. This download is an offline alternative to the live preview. No installation, account, API key, or network connection is needed after downloading.
 
 The initial screen contains 30 fictional gardening-game strings, with deliberately seeded validation issues. These are demonstration fixtures, not customer findings.
 
