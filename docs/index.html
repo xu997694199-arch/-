@@ -1,0 +1,591 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>String Desk · 中文交付检查台</title><style>:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#18372d;background:#f4f6ef;font-synthesis:none}*{box-sizing:border-box}body{margin:0}.shell{max-width:1440px;margin:auto;padding:36px}header{display:flex;justify-content:space-between;align-items:start;margin-bottom:24px}.eyebrow{font-size:11px;letter-spacing:.16em;color:#4f725e;font-weight:700}h1{font-size:34px;letter-spacing:-1px;margin:12px 0}p{font-size:14px;color:#66776d;margin:0}.badge{background:#e1edd9;padding:10px 16px;border-radius:20px;font-size:12px;white-space:nowrap}button,.file,select{border:1px solid #cbd7cc;background:white;color:#254d3a;border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer}button:hover,.file:hover{background:#eef3e8}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #d4a840}.primary,.file{background:#214b37;color:white;border-color:#214b37}.primary:hover,.file:hover{background:#35654d}.file input{display:none}.bar{display:flex;gap:8px;flex-wrap:wrap}#notice{padding:12px 0;font-size:12px;color:#566b5c;min-height:40px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 22px}.stats>div{border:1px solid #dbe3d6;background:#fff;border-radius:12px;padding:16px 22px;display:flex;align-items:baseline;gap:16px}.stats strong{font-size:30px}.stats span{font-size:11px;color:#758376}main{display:grid;grid-template-columns:minmax(320px,1fr) minmax(380px,1fr);border:1px solid #d4ded0;background:white;border-radius:16px;overflow:hidden;min-height:510px}.list{border-right:1px solid #dce4d5}.listtop{padding:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fafbf7;border-bottom:1px solid #dce4d5}h2{font-size:16px;margin:0}.listtop h2{margin-right:auto}.listtop input{width:100%;padding:9px;border:1px solid #d2dccd;border-radius:6px}.listtop select{font-size:11px;padding:6px}#list{max-height:510px;overflow:auto}.row{display:block;text-align:left;border:0;border-bottom:1px solid #edf0e9;border-radius:0;width:100%;padding:14px 18px;min-height:73px;background:#fff}.row.active{background:#eaf1e5;box-shadow:inset 3px 0 #497652}.row strong{display:block;font-size:12px;margin-bottom:7px}.row span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:#617564}.row small{float:right;color:#ab623f;font-weight:400}.editor{padding:24px}.editorhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:20px}.editorhead h2{word-break:break-all}.editor label{font-size:11px;letter-spacing:.06em;color:#7b8878;display:block;margin-bottom:9px}.context{font-size:12px;line-height:1.6;padding-top:8px;letter-spacing:0;color:#526a57}pre{font:14px/1.7 "Segoe UI","Microsoft YaHei",sans-serif;white-space:pre-wrap;word-break:break-word;background:#f4f6ef;border-radius:8px;padding:16px;color:#354e3b;margin:9px 0 18px;letter-spacing:0}textarea{width:100%;resize:vertical;border:1px solid #b5c7b0;border-radius:8px;padding:12px;font:14px/1.7 "Segoe UI","Microsoft YaHei",sans-serif;min-height:75px}.editorfoot{display:flex;justify-content:space-between;align-items:center;margin:8px 0 16px;font-size:11px;color:#6e806e}.issue{padding:10px 12px;font-size:12px;line-height:1.6;background:#fff2e7;border-left:3px solid #c7743d;margin:7px 0;border-radius:3px}.issue.warning{background:#fff8de;border-left-color:#d0a22c}.ok{font-size:12px;color:#45805b;padding:12px;background:#eff6ec;border-radius:6px}details{margin-top:20px;border-top:1px solid #e1e7db;padding-top:16px;font-size:12px;color:#6a7d68}summary{cursor:pointer;margin-bottom:10px}details button{margin-top:7px}footer{font-size:11px;line-height:1.8;color:#7a8576;margin:20px 0 0;max-width:1120px}footer strong{color:#465f48;margin-right:12px}.empty{padding:30px;font-size:13px;color:#73836e}@media(max-width:850px){.shell{padding:18px}header{gap:12px}h1{font-size:25px}.stats{grid-template-columns:1fr 1fr}.stats>div{padding:12px;gap:10px}.stats span{font-size:10px}main{grid-template-columns:1fr}.list{border-right:0}#list{max-height:300px}.badge{font-size:10px;padding:8px}.editor{padding:16px}}
+</style></head>
+<body><div class="shell"><header><div><span class="eyebrow">STRING DESK / LOCALIZATION HANDOFF</span><h1>让每条译文，有据可查。</h1><p>本地化审阅、格式检查、完整回交。文件留在当前浏览器页面。</p></div><span class="badge">离线原型 · v0.1</span></header>
+<section class="bar"><label class="file">导入 CSV / JSON<input id="import" type="file" accept=".csv,.json"></label><button id="bad">载入待修样例</button><button id="good">载入修正样例</button><button id="json">导出完整 JSON</button><button id="csv">导出表格安全 CSV</button><button id="report">导出检查报告</button></section>
+<div id="notice" role="status">原创虚构园艺游戏样例。</div><section class="stats"><div><strong id="rowsCount">0</strong><span>字符串 / STRINGS</span></div><div><strong id="errorsCount">0</strong><span>格式问题 / ERRORS</span></div><div><strong id="warningsCount">0</strong><span>待人工核对 / WARNINGS</span></div><div><strong id="changedCount">0</strong><span>本次改动 / EDITED</span></div></section>
+<main><section class="list"><div class="listtop"><h2>字符串清单</h2><select id="filter" aria-label="筛选"><option value="all">全部</option><option value="issues">有问题</option><option value="clean">检查未发现问题</option></select><input id="search" placeholder="搜索 ID、原文、译文" aria-label="搜索"></div><div id="list" role="list"></div></section><section class="editor"><div class="editorhead"><span class="eyebrow">REVIEW & EDIT</span><h2 id="selectedId">选择一条字符串</h2></div><label>上下文 / CONTEXT<div id="context" class="context"></div></label><label>原文 / SOURCE<pre id="source"></pre></label><label for="target">简体中文 / TARGET</label><textarea id="target" rows="6"></textarea><div class="editorfoot"><span id="length"></span><button id="save" class="primary">保存改动并检查</button></div><div id="issues"></div><details><summary>术语表：每行英文 = 中文</summary><textarea id="glossary" rows="4">Sunleaf = 日光叶
+Moon Seed = 月亮种子</textarea><button id="check">应用术语并重新检查</button></details></section></main>
+<footer><strong>交付边界</strong> 支持简单 {name}、{0}、printf 变量和常见成对标签。ICU、复杂脚本及实际游戏渲染需另查；无报错不等于语义已验收。长度按 Unicode 码点计数，不等于屏幕宽度。CSV 安全版会在疑似公式字段前加单引号；精确回交请用 JSON。刷新或关闭前请导出保存。</footer></div><script>/* Original prototype. No network or third-party runtime dependencies. */
+(function (root) {
+'use strict';
+function parseCSV(text) {
+ text=text.replace(/^\uFEFF/,'');const rows=[];let row=[],value='',quoted=false,closed=false;
+ for(let i=0;i<text.length;i++){const ch=text[i];
+  if(quoted){if(ch==='"'&&text[i+1]==='"'){value+='"';i++;}else if(ch==='"'){quoted=false;closed=true;}else value+=ch;}
+  else if(ch===','||ch==='\n'||ch==='\r'){row.push(value);value='';closed=false;if(ch!==','){if(!(row.length===1&&row[0]===''))rows.push(row);row=[];if(ch==='\r'&&text[i+1]==='\n')i++;}}
+  else if(ch==='"'&&value===''&&!closed)quoted=true;
+  else{if(closed||ch==='"')throw Error('CSV 引号格式不正确');value+=ch;}
+ }
+ if(quoted)throw Error('CSV 引号未闭合');if(value||row.length||closed){row.push(value);rows.push(row);}
+ if(!rows.length)throw Error('文件为空');const headers=rows.shift();
+ if(headers.some(h=>!h)||new Set(headers).size!==headers.length)throw Error('表头为空或重复');
+ ['id','source','target'].forEach(h=>{if(!headers.includes(h))throw Error('缺少列: '+h);});
+ return rows.map((r,i)=>{if(r.length!==headers.length)throw Error('第 '+(i+2)+' 行列数不符');return Object.fromEntries(headers.map((h,j)=>[h,r[j]]));});
+}
+function validateRows(rows){
+ if(!Array.isArray(rows)||!rows.length||rows.length>5000)throw Error('仅支持 1–5000 行');
+ for(const [i,r] of rows.entries()){
+  if(!r||Array.isArray(r)||typeof r!=='object')throw Error('第 '+(i+1)+' 行不是对象');
+  if(['id','source','target'].some(k=>typeof r[k]!=='string'))throw Error('第 '+(i+1)+' 行的 id/source/target 必须是文本');
+  if(Object.values(r).some(v=>typeof v!=='string'))throw Error('JSON 首版仅支持字符串字段');
+  if(Object.values(r).some(v=>v.length>20000))throw Error('字段超过 20000 字符');
+ }return rows;
+}
+function placeholderTokens(s){let ordinal=0;return(s.replace(/\{\{[^{}]*\}\}/g,'').replace(/%%/g,'').match(/\{[A-Za-z_][A-Za-z0-9_.]*\}|\{\d+\}|%(?:\d+\$)?[-+ #0]*\d*(?:\.\d+)?[sdifuxXoegc]/g)||[]).map(token=>token.startsWith('%')&&!/^%\d+\$/.test(token)?'#'+(ordinal++)+':'+token:token).sort();}
+function richTags(s){
+ const tags=[],stack=[];let bad=false;
+ for(const m of s.matchAll(/<\/?[A-Za-z][^<>]*>/g)){
+  const tag=m[0],name=/^<\/?([A-Za-z][\w:-]*)/.exec(tag)[1].toLowerCase();tags.push(tag.replace(/\s+/g,' '));
+  if(/^<\//.test(tag)){if(stack.pop()!==name)bad=true;}else if(!/\/>$/.test(tag)&&!['br','hr','img'].includes(name))stack.push(name);
+ }return{tags:tags.sort(),balanced:!bad&&!stack.length};
+}
+const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+function check(rows,glossary=[]){
+ validateRows(rows);const issues=[],ids=new Map();
+ rows.forEach((r,i)=>{const xs=ids.get(r.id)||[];xs.push(i);ids.set(r.id,xs);});
+ rows.forEach((r,i)=>{
+  const add=(code,message,level='error')=>issues.push({row:i,id:r.id,code,level,message});
+  if(!r.id.trim())add('EMPTY_ID','ID 为空 / Empty ID');
+  if(ids.get(r.id).length>1)add('DUPLICATE_ID','ID 重复 / Duplicate ID');
+  if(!r.target.trim()&&r.source.trim())add('EMPTY_TARGET','译文为空 / Missing translation');
+  if(!same(placeholderTokens(r.source),placeholderTokens(r.target)))add('PLACEHOLDER','变量数量或拼写不同 / Placeholder mismatch');
+  const a=richTags(r.source),b=richTags(r.target);
+  if(!a.balanced||!b.balanced||!same(a.tags,b.tags))add('RICH_TEXT','标签或嵌套需检查 / Tag mismatch or nesting');
+  const lim=(r.max_chars||'').trim();
+  if(lim&&(!/^\d+$/.test(lim)||+lim<1||+lim>100000))add('INVALID_LIMIT','长度上限需为 1–100000 整数 / Invalid limit');
+  else if(lim&&Array.from(r.target).length>+lim)add('LENGTH','超过约定字符上限；不代表像素宽度 / Character limit exceeded','warning');
+  for(const term of glossary)if(term.source&&term.target&&r.source.includes(term.source)&&!r.target.includes(term.target))add('GLOSSARY','术语需核对 / Expected: '+term.source+' → '+term.target,'warning');
+  if(/\{[^{}]*,\s*(?:plural|select|selectordinal)\s*,/.test(r.source+r.target))add('UNSUPPORTED_ICU','ICU 复数/选择语法需另行处理 / ICU unsupported','warning');
+  if(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/.test(r.target))add('CONTROL_CHAR','译文含不可见控制字符 / Control character');
+ });return issues;
+}
+function csv(rows,safe=true){
+ validateRows(rows);const headers=[...new Set(rows.flatMap(r=>Object.keys(r)))];let protectedCells=0;
+ const cell=value=>{let s=String(value??'');if(safe&&/^[\s\uFEFF]*[=+\-@]/.test(s)){s="'"+s;protectedCells++;}return '"'+s.replace(/"/g,'""')+'"';};
+ return{text:'\uFEFF'+[headers.map(cell).join(','),...rows.map(r=>headers.map(h=>cell(r[h])).join(','))].join('\r\n'),protectedCells};
+}
+const api={parseCSV,validateRows,check,csv,placeholderTokens};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;
+root.LQA=api;
+})(typeof window!=='undefined'?window:globalThis);
+
+</script><script>const DEMO = {
+  "good": [
+    {
+      "id": "menu.new",
+      "source": "Start a new garden",
+      "target": "开辟新花园",
+      "context": "Main menu button",
+      "max_chars": "12",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "menu.continue",
+      "source": "Return to your garden",
+      "target": "回到花园",
+      "context": "Main menu button",
+      "max_chars": "12",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "dialog.welcome",
+      "source": "Welcome back, {name}!",
+      "target": "欢迎回来，{name}！",
+      "context": "Mira greets the player",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "inventory.gold",
+      "source": "You have %d coins.",
+      "target": "你有 %d 枚金币。",
+      "context": "Wallet counter",
+      "max_chars": "24",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "tutorial.water",
+      "source": "Hold <b>Water</b> to fill the can.",
+      "target": "按住<b>浇水</b>装满水壶。",
+      "context": "Rich text tutorial",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "item.sunleaf",
+      "source": "Sunleaf grows best in morning light.",
+      "target": "日光叶在晨光中长得最好。",
+      "context": "Plant description",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "action.buy",
+      "source": "Buy seeds",
+      "target": "买种子",
+      "context": "Small action button",
+      "max_chars": "4",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "settings.music",
+      "source": "Music volume",
+      "target": "音乐音量",
+      "context": "Settings label",
+      "max_chars": "12",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "settings.sound",
+      "source": "Sound effects",
+      "target": "音效",
+      "context": "Settings label",
+      "max_chars": "12",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "dialog.mira",
+      "source": "Mira says, \"Every seed needs a little patience.\"",
+      "target": "米拉说：“每一粒种子，都需要一点耐心。”",
+      "context": "Dialogue line",
+      "max_chars": "60",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "hint.rain",
+      "source": "Rain will water your plants tonight.",
+      "target": "今晚的雨会替你浇灌植物。",
+      "context": "Weather hint",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "quest.accept",
+      "source": "Accept the request",
+      "target": "接受委托",
+      "context": "Quest button",
+      "max_chars": "10",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "item.moon",
+      "source": "Plant a Moon Seed after sunset.",
+      "target": "日落后种下月亮种子。",
+      "context": "Quest instruction",
+      "max_chars": "24",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "notice.full",
+      "source": "Your basket is full.",
+      "target": "你的篮子装满了。",
+      "context": "Inventory message",
+      "max_chars": "20",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "notice.saved",
+      "source": "Garden saved.",
+      "target": "花园已保存。",
+      "context": "Save confirmation",
+      "max_chars": "20",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "notice.sleep",
+      "source": "Rest until morning?",
+      "target": "休息到天亮吗？",
+      "context": "Confirmation dialog",
+      "max_chars": "20",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "shop.price",
+      "source": "Price: {0} coins",
+      "target": "价格：{0} 枚金币",
+      "context": "Shop price with index variable",
+      "max_chars": "24",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "quest.progress",
+      "source": "Harvest {count} carrots.",
+      "target": "收获 {count} 根胡萝卜。",
+      "context": "Quest progress",
+      "max_chars": "32",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "tutorial.path",
+      "source": "Place stones to build a path.",
+      "target": "铺上石块，修出一条小路。",
+      "context": "Tutorial instruction",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "dialog.letter",
+      "source": "Dear gardener,\nThe old bridge is open again.",
+      "target": "亲爱的园丁：\n旧桥又可以通行了。",
+      "context": "Letter with deliberate newline",
+      "max_chars": "60",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "item.pot",
+      "source": "A blue pot, made for small flowers.",
+      "target": "一个适合栽种小花的蓝色花盆。",
+      "context": "Item text containing comma",
+      "max_chars": "40",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "day.counter",
+      "source": "Day %1$d — %2$s",
+      "target": "第 %1$d 天——%2$s",
+      "context": "Positional printf tokens",
+      "max_chars": "40",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "hint.empty",
+      "source": "Nothing planted here yet.",
+      "target": "这里还没有种下任何植物。",
+      "context": "Empty bed hint",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "market.closed",
+      "source": "The market opens at sunrise.",
+      "target": "集市将在日出时开门。",
+      "context": "Market closed sign",
+      "max_chars": "25",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "gift.message",
+      "source": "A small gift from your neighbors.",
+      "target": "邻居们送来的一份小礼物。",
+      "context": "Gift description",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "weather.wind",
+      "source": "A gentle breeze moves the leaves.",
+      "target": "微风轻轻拂动叶片。",
+      "context": "Weather flavor text",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "ending.first",
+      "source": "Your first garden is in bloom.",
+      "target": "你的第一座花园开花了。",
+      "context": "Milestone notification",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "tutorial.undo",
+      "source": "Press <i>Undo</i> to restore the last step.",
+      "target": "按下<i>撤销</i>恢复上一步。",
+      "context": "Rich text tutorial",
+      "max_chars": "40",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "label.progress",
+      "source": "Growth: 50%%",
+      "target": "生长进度：50%%",
+      "context": "Escaped percent sign kept for formatter",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "dialog.goodnight",
+      "source": "See you when the sun returns.",
+      "target": "等太阳再次升起时见。",
+      "context": "Goodnight farewell",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    }
+  ],
+  "bad": [
+    {
+      "id": "menu.new",
+      "source": "Start a new garden",
+      "target": "",
+      "context": "Main menu button",
+      "max_chars": "12",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "menu.continue",
+      "source": "Return to your garden",
+      "target": "回到花园",
+      "context": "Main menu button",
+      "max_chars": "12",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "dialog.welcome",
+      "source": "Welcome back, {name}!",
+      "target": "欢迎回来！",
+      "context": "Mira greets the player",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "inventory.gold",
+      "source": "You have %d coins.",
+      "target": "你有 %d 枚金币，%s。",
+      "context": "Wallet counter",
+      "max_chars": "24",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "tutorial.water",
+      "source": "Hold <b>Water</b> to fill the can.",
+      "target": "按住<b>浇水装满水壶。",
+      "context": "Rich text tutorial",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "item.sunleaf",
+      "source": "Sunleaf grows best in morning light.",
+      "target": "太阳叶在晨光中长得最好。",
+      "context": "Plant description",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "action.buy",
+      "source": "Buy seeds",
+      "target": "现在购买一些种子",
+      "context": "Small action button",
+      "max_chars": "4",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "settings.sound",
+      "source": "Music volume",
+      "target": "音乐音量",
+      "context": "Settings label",
+      "max_chars": "12",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "settings.sound",
+      "source": "Sound effects",
+      "target": "音效",
+      "context": "Settings label",
+      "max_chars": "12",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "dialog.mira",
+      "source": "Mira says, \"Every seed needs a little patience.\"",
+      "target": "米拉说：“每一粒种子，都需要一点耐心。”",
+      "context": "Dialogue line",
+      "max_chars": "60",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "hint.rain",
+      "source": "Rain will water your plants tonight.",
+      "target": "今晚的雨会替你浇灌植物。\u0001",
+      "context": "Weather hint",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "quest.accept",
+      "source": "Accept the request",
+      "target": "接受委托",
+      "context": "Quest button",
+      "max_chars": "abc",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "item.moon",
+      "source": "Plant a Moon Seed after sunset.",
+      "target": "日落后种下月亮种子。",
+      "context": "Quest instruction",
+      "max_chars": "24",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "notice.full",
+      "source": "Your basket is full.",
+      "target": "你的篮子装满了。",
+      "context": "Inventory message",
+      "max_chars": "20",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "notice.saved",
+      "source": "Garden saved.",
+      "target": "花园已保存。",
+      "context": "Save confirmation",
+      "max_chars": "20",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "notice.sleep",
+      "source": "Rest until morning?",
+      "target": "休息到天亮吗？",
+      "context": "Confirmation dialog",
+      "max_chars": "20",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "shop.price",
+      "source": "Price: {0} coins",
+      "target": "价格：{0} 枚金币",
+      "context": "Shop price with index variable",
+      "max_chars": "24",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "quest.progress",
+      "source": "Harvest {count} carrots.",
+      "target": "收获 {count} 根胡萝卜。",
+      "context": "Quest progress",
+      "max_chars": "32",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "tutorial.path",
+      "source": "Place stones to build a path.",
+      "target": "铺上石块，修出一条小路。",
+      "context": "Tutorial instruction",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "dialog.letter",
+      "source": "Dear gardener,\nThe old bridge is open again.",
+      "target": "亲爱的园丁：\n旧桥又可以通行了。",
+      "context": "Letter with deliberate newline",
+      "max_chars": "60",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "item.pot",
+      "source": "A blue pot, made for small flowers.",
+      "target": "一个适合栽种小花的蓝色花盆。",
+      "context": "Item text containing comma",
+      "max_chars": "40",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "day.counter",
+      "source": "Day %1$d — %2$s",
+      "target": "第 %1$d 天——%2$s",
+      "context": "Positional printf tokens",
+      "max_chars": "40",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "hint.empty",
+      "source": "Nothing planted here yet.",
+      "target": "这里还没有种下任何植物。",
+      "context": "Empty bed hint",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "market.closed",
+      "source": "The market opens at sunrise.",
+      "target": "集市将在日出时开门。",
+      "context": "Market closed sign",
+      "max_chars": "25",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "gift.message",
+      "source": "A small gift from your neighbors.",
+      "target": "邻居们送来的一份小礼物。",
+      "context": "Gift description",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "weather.wind",
+      "source": "A gentle breeze moves the leaves.",
+      "target": "微风轻轻拂动叶片。",
+      "context": "Weather flavor text",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "ending.first",
+      "source": "Your first garden is in bloom.",
+      "target": "你的第一座花园开花了。",
+      "context": "Milestone notification",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "tutorial.undo",
+      "source": "Press <i>Undo</i> to restore the last step.",
+      "target": "按下<i>撤销</i>恢复上一步。",
+      "context": "Rich text tutorial",
+      "max_chars": "40",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "label.progress",
+      "source": "Growth: 50%%",
+      "target": "生长进度：50%%",
+      "context": "Escaped percent sign kept for formatter",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    },
+    {
+      "id": "dialog.goodnight",
+      "source": "See you when the sun returns.",
+      "target": "等太阳再次升起时见。",
+      "context": "Goodnight farewell",
+      "max_chars": "30",
+      "review_note": "原创虚构演示；并非真实客户项目"
+    }
+  ]
+};
+
+</script><script>(function(){
+'use strict';
+const $=id=>document.getElementById(id),clone=x=>JSON.parse(JSON.stringify(x));
+let rows=[],baseline=[],issues=[],selected=0,changed=new Set(),dirty=false,pending=false;
+const say=msg=>$('notice').textContent=msg;
+const glossary=()=>$('glossary').value.split('\n').filter(x=>x.trim()).map(line=>{const i=line.indexOf('=');if(i<1||!line.slice(i+1).trim())throw Error('术语表格式：英文 = 中文');return{source:line.slice(0,i).trim(),target:line.slice(i+1).trim()};});
+function evaluate(){issues=LQA.check(rows,glossary());$('rowsCount').textContent=rows.length;$('errorsCount').textContent=issues.filter(x=>x.level==='error').length;$('warningsCount').textContent=issues.filter(x=>x.level==='warning').length;$('changedCount').textContent=changed.size;renderList();}
+function renderList(){
+ const out=$('list');out.replaceChildren();const query=$('search').value.toLowerCase(),mode=$('filter').value;
+ rows.forEach((r,i)=>{const list=issues.filter(x=>x.row===i);if(mode==='issues'&&!list.length||mode==='clean'&&list.length)return;if(query&&![r.id,r.source,r.target].join(' ').toLowerCase().includes(query))return;
+ const b=document.createElement('button');b.className='row'+(selected===i?' active':'');b.setAttribute('role','listitem');const h=document.createElement('strong');h.textContent=r.id||'(empty ID)';const n=document.createElement('small');n.textContent=list.length?list.length+' 项待查':'✓';h.append(n);const t=document.createElement('span');t.textContent=r.target||'— 未填写译文 —';b.append(h,t);b.onclick=()=>{try{commit();selected=i;renderList();renderEditor();}catch(e){say(e.message);}};out.append(b);
+ });if(!out.children.length){const d=document.createElement('p');d.className='empty';d.textContent='没有匹配的字符串。';out.append(d);}
+}
+function renderEditor(){const r=rows[selected];if(!r)return;$('selectedId').textContent=r.id||'(empty ID)';$('context').textContent=r.context||'未提供上下文';$('source').textContent=r.source;$('target').value=r.target;pending=false;renderIssues();}
+function renderIssues(){const r=rows[selected];$('length').textContent=Array.from($('target').value).length+' 字符 / 上限 '+(r.max_chars||'未约定');const out=$('issues');out.replaceChildren();const found=issues.filter(x=>x.row===selected);for(const x of found){const d=document.createElement('div');d.className='issue '+x.level;d.textContent=x.message;out.append(d);}if(!found.length){const d=document.createElement('div');d.className='ok';d.textContent='自动检查未发现问题。语义和实际游戏画面仍需核对。';out.append(d);}}
+function commit(){if(!rows[selected]||!pending)return;const value=$('target').value;LQA.validateRows(rows.map((r,i)=>i===selected?{...r,target:value}:r));glossary();rows[selected].target=value;if(rows[selected].target!==baseline[selected].target)changed.add(selected);else changed.delete(selected);pending=false;dirty=true;evaluate();renderIssues();}
+function load(data,label){LQA.validateRows(data);glossary();if((dirty||pending)&&!confirm('将替换当前内容。未导出的改动会丢失，是否继续？'))return;rows=clone(data);baseline=clone(data);selected=0;changed=new Set();dirty=false;pending=false;$('filter').value='all';$('search').value='';evaluate();renderEditor();say(label+' · 请导出后再关闭。');}
+function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
+const guarded=fn=>()=>{try{fn();}catch(e){say('未完成：'+e.message);}};
+$('bad').onclick=guarded(()=>load(DEMO.bad,'已载入 30 条原创虚构待修样例'));
+$('good').onclick=guarded(()=>load(DEMO.good,'已载入 30 条原创虚构修正样例；并非真实游戏验收'));
+$('save').onclick=guarded(()=>{commit();evaluate();renderIssues();say('已保存在当前页面内存；请导出文件。');});
+$('check').onclick=guarded(()=>{commit();evaluate();renderIssues();say('检查完成；术语表按大小写敏感的文本片段匹配。');});
+$('target').oninput=()=>{pending=true;renderIssues();say('译文尚未保存；问题列表显示上次检查结果。点击保存改动并检查。');};
+$('search').oninput=renderList;$('filter').onchange=renderList;
+$('json').onclick=guarded(()=>{commit();download('localization-strings.json',JSON.stringify(rows,null,2),'application/json;charset=utf-8');dirty=false;say('已发起 JSON 下载：保留所有原始字段，请确认文件已保存。');});
+$('csv').onclick=guarded(()=>{commit();const result=LQA.csv(rows);download('localization-spreadsheet-safe.csv',result.text,'text/csv;charset=utf-8');say('已发起表格安全 CSV 下载；'+result.protectedCells+' 个字段添加了防公式单引号。精确回交请使用 JSON。');});
+$('report').onclick=guarded(()=>{commit();evaluate();download('localization-check-report.json',JSON.stringify({generated_utc:new Date().toISOString(),tool:'String Desk 0.1 prototype',scope:'Simple placeholders, tags, glossary and code-point length. No semantic or game-build approval.',rows:rows.length,issues,changed_rows:[...changed].map(row=>({row:row+1,id:rows[row].id})),glossary:glossary()},null,2),'application/json;charset=utf-8');say('已发起检查报告下载；报告不等于人工验收。');});
+$('import').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>2*1024*1024)throw Error('文件超过 2 MiB');const text=await f.text();load(/\.json$/i.test(f.name)?JSON.parse(text.replace(/^\uFEFF/,'')):LQA.parseCSV(text),'已导入 '+f.name);}catch(err){say('导入失败：'+err.message);}finally{e.target.value='';}};
+window.addEventListener('beforeunload',e=>{if(dirty||pending){e.preventDefault();e.returnValue='';}});
+load(DEMO.bad,'已载入原创虚构样例；标记的是预置问题，不是真实客户缺陷');
+})();
+</script></body></html>
